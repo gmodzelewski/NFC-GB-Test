@@ -60,10 +60,10 @@ public class BackgroundModelTest extends ActivityInstrumentationTestCase2<MainAc
 			
 		solo.clickOnButton(solo.getString(R.string.ok_button));
 		
+		solo.clickOnView(labelForCreateEvent); //EventSpinner changes his count only at click on it
 		int newEventCount = eventSpinner.getCount();
 		Log.i(getName(), "newEventCount = " + String.valueOf(newEventCount));
-//		assertTrue(newEventCount == eventCount + 1);
-		assertTrue(newEventCount == eventCount);
+		assertTrue(newEventCount == eventCount + 1);
 	}
 	
 	public void testUseCase02EditEvent(){
