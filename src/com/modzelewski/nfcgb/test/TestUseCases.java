@@ -5,6 +5,7 @@ import android.test.suitebuilder.annotation.Suppress;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -43,9 +44,10 @@ public class TestUseCases extends
 
 		solo.clickOnButton(solo.getString(R.string.ok_button));
 
-//		solo.clickOnView(labelForCreateEvent); // EventSpinner changes his count
-												// only at click on it
-		
+		// solo.clickOnView(labelForCreateEvent); // EventSpinner changes his
+		// count
+		// only at click on it
+
 		solo.clickOnView(eventSpinner);
 		int newEventCount = eventSpinner.getCount();
 		Log.i(getName(), "newEventCount = " + String.valueOf(newEventCount));
@@ -76,11 +78,12 @@ public class TestUseCases extends
 		assertTrue(eventSpinnerLabel.contains(newText));
 
 	}
+
 	@Suppress
 	public void testUseCase03ChangeEvent() {
 		Spinner eventSpinner = (Spinner) solo.getView(R.id.events_spinner);
-		
-		//create 2 events - same as in BackgroundModelTest
+
+		// create 2 events - same as in BackgroundModelTest
 		int eventCountBefore = eventSpinner.getCount();
 		assertNotNull(eventSpinner);
 		assertNotNull(eventCountBefore);
@@ -88,21 +91,25 @@ public class TestUseCases extends
 		// add event 1
 		solo.clickOnView(labelForCreateEvent);
 		EditText eventNameEditText = (EditText) solo.getView(R.id.ed_eventname);
-		solo.enterText(eventNameEditText, solo.getString(R.string.use_case_1_eventname));
+		solo.enterText(eventNameEditText,
+				solo.getString(R.string.use_case_1_eventname));
 		solo.clickOnButton(solo.getString(R.string.ok_button));
-		//add event 2
+		// add event 2
 		solo.clickOnView(labelForCreateEvent);
-		EditText eventNameEditText2 = (EditText) solo.getView(R.id.ed_eventname);
-		solo.enterText(eventNameEditText2, solo.getString(R.string.use_case_3_eventname));
+		EditText eventNameEditText2 = (EditText) solo
+				.getView(R.id.ed_eventname);
+		solo.enterText(eventNameEditText2,
+				solo.getString(R.string.use_case_3_eventname));
 		solo.clickOnButton(solo.getString(R.string.ok_button));
 		solo.clickOnView(eventSpinner);
 		int eventCountAfter = eventSpinner.getCount();
-		assertTrue(eventCountAfter -2 == eventCountBefore);
-		
+		assertTrue(eventCountAfter - 2 == eventCountBefore);
+
 		solo.clickOnText(solo.getString(R.string.use_case_1_eventname));
-//		assertTrue(); don't know
+		// assertTrue(); don't know
 	}
 
+	@Suppress
 	public void testUseCase04RemoveEvent() {
 		Spinner eventSpinner = (Spinner) solo.getView(R.id.events_spinner);
 		int eventCountBefore = eventSpinner.getCount();
@@ -117,27 +124,117 @@ public class TestUseCases extends
 
 		solo.clickOnView(eventSpinner);
 		int eventCountAfter = eventSpinner.getCount();
-		Log.i("USECASEREMOVE", "count before = \n\r" + eventCountBefore + "\ncount after = \n\t" + eventCountAfter);
-		assertEquals(eventCountAfter, eventCountBefore-1);
+		Log.i("USECASEREMOVE", "count before = \n\r" + eventCountBefore
+				+ "\ncount after = \n\t" + eventCountAfter);
+		assertEquals(eventCountAfter, eventCountBefore - 1);
 	}
-	
+
+	@Suppress
 	public void testUseCase04RemoveEventWhileMoreThanOne() {
 		Spinner eventSpinner = (Spinner) solo.getView(R.id.events_spinner);
 		String labelForRemoveEvent = solo.getString(R.string.remove_event);
 
 		int i = eventSpinner.getCount();
-		while(i > 1) {
+		while (i > 1) {
 			assertNotNull(eventSpinner);
 			solo.clickLongOnView(eventSpinner);
 			solo.clickOnText(labelForRemoveEvent);
 			solo.clickOnButton(solo.getString(R.string.ok_button));
 			i--;
 		}
-		
-//		Log.i("USECASEREMOVE", "count before = \n\r" + eventCountBefore + "\ncount after = \n\t" + eventCountAfter);
-		
+		assertTrue(eventSpinner.getCount() == 1);
 	}
-	
+
+	public void testUseCase05CreatePerson() {
+		View labelForCreatePerson = solo.getView(R.id.om_add_person);
+		ListView personLV = (ListView) solo.getView(R.id.personsLV);
+		int countBefore = personLV.getCount();
+		solo.clickOnView(labelForCreatePerson);
+
+		EditText personNameEditText = (EditText) solo.getView(R.id.pd_name);
+		EditText personMailEditText = (EditText) solo.getView(R.id.pd_email);
+		solo.enterText(personNameEditText, "Person with a name");
+		solo.enterText(personMailEditText, "person@emailadress.de");
+		solo.clickOnButton(solo.getString(R.string.ok_button));
+		int countAfter = personLV.getCount();
+		Log.i("testUseCase05CreatePerson", "countBefore =\n\t"+countBefore);
+		Log.i("testUseCase05CreatePerson", "countAfter =\n\t"+countAfter);
+		assertTrue(countBefore == countAfter - 1);
+	}
+
+	public void testUseCase06EditPersonPerson() {
+		String editPerson = solo.getString(R.string.edit_person);
+		ListView personLV = (ListView) solo.getView(R.id.personsLV);
+		int countBefore = personLV.getCount();
+		solo.clickOnView(personLV.getChildAt(countBefore));
+		solo.clickOnText(editPerson);
+
+		EditText personNameEditText = (EditText) solo.getView(R.id.pd_name);
+		solo.clearEditText(personNameEditText);
+		EditText personMailEditText = (EditText) solo.getView(R.id.pd_email);
+		solo.clearEditText(personMailEditText);
+		
+		String personName = "The edited name of a person";
+		String personMail = "person@mailadress.de";
+		solo.enterText(personNameEditText, personName);
+		solo.enterText(personMailEditText, personMail);
+		solo.clickOnButton(solo.getString(R.string.ok_button));
+		int countAfter = personLV.getCount();
+		assertTrue(countBefore == countAfter);
+		assertTrue(solo.searchText(personName));
+		assertTrue(solo.searchText(personMail));
+	}
+
+	@Suppress
+	public void testUseCase07DeletePerson() {
+
+	}
+
+	@Suppress
+	public void testUseCase08CreateGroup() {
+
+	}
+
+	@Suppress
+	public void testUseCase09EditGroup() {
+
+	}
+
+	@Suppress
+	public void testUseCase10RemoveGroup() {
+
+	}
+
+	@Suppress
+	public void testUseCase11AssignPersonToGroup() {
+
+	}
+
+	@Suppress
+	public void testUseCase12SendGroupMail() {
+
+	}
+
+	@Suppress
+	public void testUseCase13ShowAndHidePersonsInAGroup() {
+
+	}
+
+	@Suppress
+	public void testUseCase14EditPersonWhichIsInAGroup() {
+
+	}
+
+	@Suppress
+	public void testUseCase15RemovePersonFromGroup() {
+
+	}
+
+	@Suppress
+	public void testUseCase16SyncViaNFC() {
+
+	}
+
 	@Override
 	protected void tearDown() throws Exception {
 
