@@ -24,7 +24,7 @@ public class BackgroundModelTest extends
 	public BackgroundModelTest() {
 		super(MainActivity.class);
 	}
-
+	
 	@Override
 	protected void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());

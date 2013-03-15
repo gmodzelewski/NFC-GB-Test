@@ -1,3 +1,4 @@
+package com.modzelewski.nfcgb.test;
 ///*
 // * This is an example test project created in Eclipse to test NotePad which is a sample 
 // * project located in AndroidSDK/samples/android-11/NotePad
