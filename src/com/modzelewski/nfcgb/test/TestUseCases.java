@@ -27,7 +27,6 @@ public class TestUseCases extends
 				MainActivity.class);
 	}
 
-	@Suppress
 	public void testUseCase01CreateEvent() {
 		Spinner eventSpinner = (Spinner) solo.getView(R.id.events_spinner);
 		int eventCount = eventSpinner.getCount();
@@ -54,7 +53,6 @@ public class TestUseCases extends
 		assertTrue(newEventCount == eventCount + 1);
 	}
 
-	@Suppress
 	public void testUseCase02EditEvent() {
 		Spinner eventSpinner = (Spinner) solo.getView(R.id.events_spinner);
 		int eventCount = eventSpinner.getCount();
@@ -79,7 +77,7 @@ public class TestUseCases extends
 
 	}
 
-	@Suppress
+
 	public void testUseCase03ChangeEvent() {
 		Spinner eventSpinner = (Spinner) solo.getView(R.id.events_spinner);
 
@@ -109,7 +107,7 @@ public class TestUseCases extends
 		// assertTrue(); don't know
 	}
 
-	@Suppress
+
 	public void testUseCase04RemoveEvent() {
 		Spinner eventSpinner = (Spinner) solo.getView(R.id.events_spinner);
 		int eventCountBefore = eventSpinner.getCount();
@@ -129,7 +127,6 @@ public class TestUseCases extends
 		assertEquals(eventCountAfter, eventCountBefore - 1);
 	}
 
-	@Suppress
 	public void testUseCase04RemoveEventWhileMoreThanOne() {
 		Spinner eventSpinner = (Spinner) solo.getView(R.id.events_spinner);
 		String labelForRemoveEvent = solo.getString(R.string.remove_event);
